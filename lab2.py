@@ -127,17 +127,21 @@ def perform_task():
         save_to_file(key_file, key)
 
         # Скремблер 1
-        scrambled_data_1, states_scrambler1 = lfsr_scrambler(encrypted_data, [5, 4, 2, 0], 0b10101010)
+        scrembler1_seed = open('scrembler1.txt').readline()
+        scrembler1_seed = [int(i) for i in scrembler1_seed.split(',')]
+        scrambled_data_1, states_scrambler1 = lfsr_scrambler(encrypted_data, scrembler1_seed, 0b10101010)
         save_to_file(scrambled_file, scrambled_data_1)
 
-        descrambled_data_1, states_descrambler1 = lfsr_descrambler(scrambled_data_1, [5, 4, 2, 0], 0b10101010)
+        descrambled_data_1, states_descrambler1 = lfsr_descrambler(scrambled_data_1, scrembler1_seed, 0b10101010)
         save_to_file(descrambled_file, plaintext)
 
         # Скремблер 2
-        scrambled_data_2, states_scrambler2 = lfsr_scrambler(encrypted_data, [5, 2, 0], 0b10101010)
+        scrembler2_seed = open('scrembler2.txt').readline()
+        scrembler2_seed = [int(i) for i in scrembler2_seed.split(',')]
+        scrambled_data_2, states_scrambler2 = lfsr_scrambler(encrypted_data, scrembler2_seed, 0b10101010)
         save_to_file(scrambled_file, scrambled_data_2)
 
-        descrambled_data_2, states_descrambler2 = lfsr_descrambler(scrambled_data_2, [5, 2, 0], 0b10101010)
+        descrambled_data_2, states_descrambler2 = lfsr_descrambler(scrambled_data_2, scrembler2_seed, 0b10101010)
         save_to_file(descrambled_file2, plaintext)
 
         decrypted_data = xor_encrypt(descrambled_data_2, key)
